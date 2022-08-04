@@ -17,7 +17,8 @@ import requests
 import certifi
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from utils.rapid_chk import rapid_chk
+from utils.dup_chk import dup_chk
+from utils.date_mpi import date_mpi
 
 # from utils import date_mip
 
@@ -60,29 +61,14 @@ Mongo_Client = MongoClient(
 db = Mongo_Client[mongodb]
 collection = db[mongocollect]
 
-
-def update_created(recerd, date_string):
-    """When the 'createdAt' date is created in Mongo, it is a str. This function changes the
-    MongoDB type to 'date'. This is required for a MongoDB index job that purges records
-    older than 7-days. This index job is from managing the size of the Mongo database.
-
-    Args:
-        record (int): MongoDB record object _id
-        date_string (str): The records created time to be converted
-    """
-    try:
-        mydate = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f%z")
-        collection.update_one({"_id": recerd}, {"$set": {"createdAt": mydate}})
-    except ConnectionFailure as key_error:
-        print(key_error)
-
-
 new_record = collection.find({"sub": {"$exists": False}})
 
 # Get the new record ID's in Mongo
 
 pre_record_ids = [rec.get("_id") for rec in new_record]
 
-duplicate_collection = rapid_chk(pre_record_ids, collection)
+date_mpi(pre_record_ids, collection)
+
+duplicate_collection = dup_chk(pre_record_ids, collection)
 
 print(duplicate_collection)
