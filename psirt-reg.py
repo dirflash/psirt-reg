@@ -8,7 +8,6 @@ __license__ = "MIT License"
 
 import configparser
 import logging
-from datetime import datetime, date, timedelta, timezone
 import os
 import sys
 import json
@@ -61,14 +60,19 @@ Mongo_Client = MongoClient(
 db = Mongo_Client[mongodb]
 collection = db[mongocollect]
 
+logging.info("--- Start run ---")
+
 new_record = collection.find({"sub": {"$exists": False}})
 
 # Get the new record ID's in Mongo
-
 pre_record_ids = [rec.get("_id") for rec in new_record]
 
+# Update 'created' format to 'Date'
 date_mpi(pre_record_ids, collection)
 
+# Check for duplicate subscription requests
 duplicate_collection = dup_chk(pre_record_ids, collection)
 
 print(duplicate_collection)
+
+logging.info("--- End run ---")

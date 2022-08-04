@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""This script updates Mongo record 'created' to 'Date' format."""
+
+__author__ = "Aaron Davis"
+__version__ = "0.1.5"
+__copyright__ = "Copyright (c) 2022 Aaron Davis"
+__license__ = "MIT License"
+
 import logging
 import sys
 from datetime import datetime
@@ -14,13 +22,13 @@ logging.basicConfig(
 
 
 def date_mpi(record_ids, funt_collection):
-    """When the 'createdAt' date is created in Mongo, it is a str. This function changes the
-    MongoDB type to 'date'. This is required for a MongoDB index job that purges records
-    older than 7-days. This index job is from managing the size of the Mongo database.
+    """When the 'created' date is created in Mongo, it is a str. This function changes the
+    MongoDB type to 'Date'. This is required for a MongoDB index job that purges older
+    records. This index job is from managing the size of the Mongo database.
 
     Args:
-        record (int): MongoDB record object _id
-        date_string (str): The records created time to be converted
+        record_ids (int): MongoDB record object _id to check
+        funt_collection (str): MongoDB connection string
     """
     logging.info("Entered date_mpi module.")
     for value in record_ids:
