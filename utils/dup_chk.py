@@ -21,6 +21,7 @@ logging.basicConfig(
 
 
 def dup_chk(record_ids, funt_collection):
+    logging.info("Entered dup_chk module.")
     logging.info("Before duplicate test: %s", len(record_ids))
     dupl_chk = []
     for cnt, value in enumerate(record_ids):
@@ -47,11 +48,15 @@ def dup_chk(record_ids, funt_collection):
                 ddiff_list.append(e)
     dup_ids = [dupl_chk[d]["record_id"] for d in ddiff_list]
     for i in dup_ids:
-        funt_collection.update_one(
+        logging.info("Checking %s.", i)
+        dup_req = funt_collection.update_one(
             {"_id": i},
             {"$set": {"dup_request": True}},
         )
+        logging.info("%s['dup_request'] type updated: %s", i, dup_req.acknowledged)
     post_record_ids = len(record_ids) - len(dup_ids)
     logging.info("After duplicate test: %s", post_record_ids)
+
+    logging.info("Exited dup_chk module.")
 
     return dup_ids
