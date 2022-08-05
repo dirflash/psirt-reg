@@ -11,15 +11,12 @@ import logging
 import os
 import sys
 import json
-from time import time
 import requests
 import certifi
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from utils.dup_chk import dup_chk
 from utils.date_mpi import date_mpi
-
-# from utils import date_mip
 
 
 logging.basicConfig(
