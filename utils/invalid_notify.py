@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""This script responds to requestor with invalid CVE format notification."""
+"""This script receives list of invalid CVE subscription requests, updates the MongoDB record,
+and replies to requestor with notification message in Webex App."""
 
 __author__ = "Aaron Davis"
 __version__ = "0.1.5"
@@ -39,15 +40,11 @@ Please resubmit request."""
 
 
 def invalid_notify(ids, funt_collection):
-    """This function tests for valid CVE format in request.
+    """This function updates the MongoDB record and sends a message to the requestor.
 
     Args:
         ids (int): MongoDB record object _id of invalid sub requests
         funt_collection (str): MongoDB connection string
-
-    Returns:
-        bad_cve (list): List of record _id with invalid format
-        good_cve (list): List of record _id with valid format
     """
     logging.info("Entered invalid_notify module.")
 

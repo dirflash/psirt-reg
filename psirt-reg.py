@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""This script is the logic and brains for psirt-bot scriptions."""
+"""This script is the logic and brains for psirt-bot subscriptions."""
 
 __author__ = "Aaron Davis"
 __version__ = "0.1.5"
