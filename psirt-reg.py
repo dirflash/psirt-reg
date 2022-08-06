@@ -72,7 +72,6 @@ date_mpi(pre_record_ids, collection)
 subscription = dup_chk(pre_record_ids, collection)
 
 invalid_cve, valid_cve = cve_chk(subscription, collection)
-print(invalid_cve)
 print(valid_cve)
 
 if len(invalid_cve) > 0:
