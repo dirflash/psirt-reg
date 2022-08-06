@@ -17,6 +17,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from utils.dup_chk import dup_chk
 from utils.date_mpi import date_mpi
+from utils.cve_chk import cve_chk
 
 # sign test
 
@@ -71,6 +72,6 @@ date_mpi(pre_record_ids, collection)
 # Check for duplicate subscription requests
 subscription = dup_chk(pre_record_ids, collection)
 
-print(subscription)
+cve_chk(subscription, collection)
 
 logging.info("--- End run ---")
