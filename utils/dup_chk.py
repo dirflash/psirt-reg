@@ -29,7 +29,7 @@ def dup_chk(record_ids, funt_collection):
         funt_collection (str): MongoDB connection string
 
     Returns:
-        (list): List of record _id deemed to be duplicate requests.
+        (list): List of non duplicate record _id requests.
     """
     logging.info("Entered dup_chk module.")
     logging.info("Before duplicate test: %s", len(record_ids))

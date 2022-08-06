@@ -31,6 +31,7 @@ def date_mpi(record_ids, funt_collection):
         funt_collection (str): MongoDB connection string
     """
     logging.info("Entered date_mpi module.")
+
     for value in record_ids:
         record_id = {"_id": value}
         rec = funt_collection.find_one(record_id)
@@ -48,5 +49,7 @@ def date_mpi(record_ids, funt_collection):
                 )
         except ConnectionFailure as key_error:
             print(key_error)
+
     logging.info("Exited date_mpi module.")
+
     return

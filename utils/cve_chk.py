@@ -7,22 +7,24 @@ __copyright__ = "Copyright (c) 2022 Aaron Davis"
 __license__ = "MIT License"
 
 import logging
-import sys
 import re
 
 
 def cve_chk(subs, funt_collection):
-    """This function is testing for duplicate subscription requests. If a duplicate is found,
-    a "dup_request" record is added to the MongoDB document.
+    """This function tests for valid CVE format in request.
 
     Args:
-        record_ids (int): MongoDB record object _id to check
+        subs (int): MongoDB record object _id of non-duplicated sub requests
         funt_collection (str): MongoDB connection string
 
     Returns:
-        (list): List of record _id deemed to be duplicate requests.
+        bad_cve (list): List of record _id with invalid format
+        good_cve (list): List of record _id with valid format
     """
     logging.info("Entered sub_chk module.")
+
+    bad_cve = []
+    good_cve = []
 
     for value in subs:
         record_id = {"_id": value}
@@ -31,8 +33,13 @@ def cve_chk(subs, funt_collection):
         cve_test = re.search(
             "[cC][vV][eE]-20[1-2][0-9]-[0-9][0-9][0-9][0-9]+", cve_string
         )
+        if bool(cve_test) is False:
+            bad_cve.append(value)
+        else:
+            good_cve.append(value)
         logging.info("%s matches CVE format: %s", value, bool(cve_test))
 
+    logging.info("%s invalid cve format.", len(bad_cve))
     logging.info("Exited cve_chk module.")
 
-    return
+    return (bad_cve, good_cve)

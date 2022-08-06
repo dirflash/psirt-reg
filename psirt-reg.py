@@ -18,8 +18,7 @@ from pymongo.errors import ConnectionFailure
 from utils.dup_chk import dup_chk
 from utils.date_mpi import date_mpi
 from utils.cve_chk import cve_chk
-
-# sign test
+from utils.invalid_notify import invalid_notify
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -72,6 +71,11 @@ date_mpi(pre_record_ids, collection)
 # Check for duplicate subscription requests
 subscription = dup_chk(pre_record_ids, collection)
 
-cve_chk(subscription, collection)
+invalid_cve, valid_cve = cve_chk(subscription, collection)
+print(invalid_cve)
+print(valid_cve)
+
+if len(invalid_cve) > 0:
+    invalid_notify(invalid_cve, collection)
 
 logging.info("--- End run ---")
