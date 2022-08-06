@@ -69,8 +69,8 @@ pre_record_ids = [rec.get("_id") for rec in new_record]
 date_mpi(pre_record_ids, collection)
 
 # Check for duplicate subscription requests
-duplicate_collection = dup_chk(pre_record_ids, collection)
+subscription = dup_chk(pre_record_ids, collection)
 
-print(duplicate_collection)
+print(subscription)
 
 logging.info("--- End run ---")

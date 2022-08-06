@@ -35,11 +35,14 @@ def dup_chk(record_ids, funt_collection):
     logging.info("Before duplicate test: %s", len(record_ids))
     dupl_chk = []
     dup_record = []
+    subs = []
     for cnt, value in enumerate(record_ids):
         record_id = {"_id": value}
         dup_collect = funt_collection.find_one(record_id)
         if "dup_request" in dup_collect:
             dup_record.append(value)
+        else:
+            subs.append(value)
         dupl_chk.append(
             {
                 "record_id": value,
@@ -58,21 +61,23 @@ def dup_chk(record_ids, funt_collection):
                 exclude_paths={"root['record_id]", "root['created']"},
             )
             if bool(ddiff) is False:
-                ddiff_list.append(e)
-    dup_ids = [dupl_chk[d]["record_id"] for d in ddiff_list]
-    for i in dup_ids:
-        logging.info("Checking %s.", i)
-        if i not in dup_record:
+                ddiff_list.append(dupl_chk[e]["record_id"])
+    for ri in ddiff_list:
+        logging.info("Checking %s.", ri)
+        if ri not in dup_record:
             dup_req = funt_collection.update_one(
-                {"_id": i},
+                {"_id": ri},
                 {"$set": {"dup_request": True}},
             )
-            logging.info("%s['dup_request'] type updated: %s", i, dup_req.acknowledged)
+            if ri in subs:
+                ri_pop = subs.index(ri)
+                subs.pop(ri_pop)
+            logging.info("%s['dup_request'] added: %s", ri, dup_req.acknowledged)
         else:
-            logging.info("%s['dup_request'] type already updated.", i)
-    post_record_ids = len(record_ids) - len(dup_ids)
+            logging.info("%s['dup_request'] already added.", ri)
+    post_record_ids = len(record_ids) - len(ddiff_list)
     logging.info("After duplicate test: %s", post_record_ids)
 
     logging.info("Exited dup_chk module.")
 
-    return dup_ids
+    return subs
